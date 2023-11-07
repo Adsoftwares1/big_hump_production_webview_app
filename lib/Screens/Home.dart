@@ -1,20 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:ezeehome_webview/Controllers/InternetConnectivity.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../Controllers/errors_handling.dart';
-import '../Controllers/google_ads.dart';
 import '../chnages.dart';
-import '../main.dart';
 
 class Home extends StatefulWidget {
   Home({
@@ -36,8 +33,6 @@ class _HomeState extends State<Home> {
 
   // FacebookBannerAd? facebookBannerAd;
   bool _isInterstitialAdLoaded = false;
-  late BannerAd _bannerGoogleAd;
-  InterstitialAd? _interstialGoogleAd;
   bool _isLoaded = false;
   //for loading progress
   // double? progress;
