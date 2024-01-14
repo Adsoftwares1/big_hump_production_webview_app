@@ -129,6 +129,45 @@ class _HomeState extends State<Home> {
             InAppWebView(
               initialUrlRequest:
                   URLRequest(url: Uri.parse('${Changes.mainUrl}')),
+
+              initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+                  userAgent:
+                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                  applicationNameForUserAgent: "Big Hump productoin",
+                  // debuggingEnabled: true,
+
+                  javaScriptEnabled: true,
+                  useShouldOverrideUrlLoading: true,
+                  useOnLoadResource: true,
+                  cacheEnabled: true,
+                ),
+                ios: IOSInAppWebViewOptions(),
+                android: AndroidInAppWebViewOptions(
+                  useHybridComposition: true,
+                  loadsImagesAutomatically: true,
+                  mixedContentMode:
+                      AndroidMixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+                  allowContentAccess: true,
+                ),
+              ),
+
+              // initialOptions: InAppWebViewGroupOptions(
+              //     crossPlatform: InAppWebViewOptions(
+              //       cacheEnabled: true,
+              //       javaScriptEnabled: true,
+              //       useOnDownloadStart: true,
+              //       useShouldOverrideUrlLoading: true,
+              //     ),
+              //     ios: IOSInAppWebViewOptions(),
+              //     android: AndroidInAppWebViewOptions(
+              //       useHybridComposition: true,
+              //       loadsImagesAutomatically: true,
+              //       mixedContentMode:
+              //           AndroidMixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+              //       allowContentAccess: true,
+              //     )),
+
               onWebViewCreated: (controller) {
                 _webViewController = controller;
               },
@@ -172,21 +211,7 @@ class _HomeState extends State<Home> {
                       builder: (context) => Home(),
                     ));
                   }),
-              initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(
-                    cacheEnabled: true,
-                    javaScriptEnabled: true,
-                    useOnDownloadStart: true,
-                    useShouldOverrideUrlLoading: true,
-                  ),
-                  ios: IOSInAppWebViewOptions(),
-                  android: AndroidInAppWebViewOptions(
-                    useHybridComposition: true,
-                    loadsImagesAutomatically: true,
-                    mixedContentMode:
-                        AndroidMixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
-                    allowContentAccess: true,
-                  )),
+
               androidOnPermissionRequest:
                   (controller, origin, resources) async {
                 return PermissionRequestResponse(
@@ -261,8 +286,10 @@ class _HomeState extends State<Home> {
                 });
                 var uri = navigationAction.request.url;
                 if (uri!.toString().startsWith(Changes.startPointUrl)) {
+                  //Navigator.pop(context);
                   return NavigationActionPolicy.ALLOW;
                 }
+                //return NavigationActionPolicy.ALLOW;
                 // else if (uri!.toString().startsWith(Changes.startPointUrl2)) {
                 //   if (kDebugMode) {
                 //     print('opening phone $uri');
@@ -318,15 +345,15 @@ class _HomeState extends State<Home> {
             //   ),
             // ),
 
-            Visibility(
-              visible:
-                  _isLoading, // Show the progress indicator only when loading
-              child: Center(
-                  child: CircularProgressIndicator(
-                // value: _progress,
-                color: Colors.green,
-              )),
-            ),
+            // Visibility(
+            //   visible:
+            //       _isLoading, // Show the progress indicator only when loading
+            //   child: Center(
+            //       child: CircularProgressIndicator(
+            //     // value: _progress,
+            //     color: Colors.green,
+            //   )),
+            // ),
           ],
         ),
 
@@ -397,6 +424,12 @@ class _HomeState extends State<Home> {
 
   Future<void> _launchExternalUrl(String url) async {
     if (await canLaunch(url)) {
+      print("Current URL : $url");
+      if (url.contains(
+          'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=')) {
+        //'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=969928336570-qi6bqrig7glue1t7kvqgh6b4l5q9070n.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fmicrojobs.porpop.com%2Fwp-login.php%3Fsociallogin%3DGoogle&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline&state=HA-23GRCEOKAH5NZTUY94I7PWF0Q1VJ6SL8DMXB') {
+        url = 'https://microjobs.porpop.com/wp-login.php?sociallogin=Google';
+      }
       await launch(url, forceSafariVC: false, forceWebView: false);
     } else {
       throw 'Could not launch $url';
